@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NUMBER DOMINION: VIP PRO ULTRA</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <canvas id="bg-canvas"></canvas>
+  <div id="scanlines"></div>
+
+  <!-- MAIN MENU -->
+  <div id="screen-menu" class="screen active">
+    <div class="menu-logo">
+      <div class="logo-glitch" data-text="NUMBER DOMINION">NUMBER DOMINION</div>
+      <div class="logo-sub">VIP PRO ULTRA</div>
+      <div class="logo-tagline">MASTER THE NUMBERS. DOMINATE THE SYSTEM.</div>
+    </div>
+    <div class="menu-stats-bar">
+      <span id="menu-rank-display">RANK: RECRUIT</span>
+      <span id="menu-xp-display">XP: 0</span>
+      <span id="menu-coins-display">⬡ 0</span>
+      <span id="menu-wins-display">WINS: 0</span>
+    </div>
+    <nav class="menu-nav">
+      <button class="menu-btn primary" onclick="UI.showScreen('screen-modes')">▶ PLAY</button>
+      <button class="menu-btn" onclick="UI.showScreen('screen-campaign')">📡 CAMPAIGN</button>
+      <button class="menu-btn" onclick="UI.showScreen('screen-daily')">🗓 DAILY CHALLENGE</button>
+      <button class="menu-btn" onclick="UI.showScreen('screen-ranked')">⚔ RANKED</button>
+      <button class="menu-btn" onclick="UI.showScreen('screen-upgrades')">🔧 UPGRADES</button>
+      <button class="menu-btn" onclick="UI.showScreen('screen-achievements')">🏆 ACHIEVEMENTS</button>
+      <button class="menu-btn" onclick="UI.showScreen('screen-stats')">📊 STATISTICS</button>
+      <button class="menu-btn" onclick="UI.showScreen('screen-settings')">⚙ SETTINGS</button>
+    </nav>
+    <div class="menu-footer">
+      <span>BUILD v4.2.0</span>
+      <span id="daily-streak-display">DAILY STREAK: 0</span>
+    </div>
+  </div>
+
+  <!-- MODE SELECT -->
+  <div id="screen-modes" class="screen">
+    <div class="screen-header">
+      <button class="back-btn" onclick="UI.showScreen('screen-menu')">◄ BACK</button>
+      <h2 class="screen-title">SELECT MODE</h2>
+    </div>
+    <div class="modes-grid" id="modes-grid"></div>
+  </div>
+
+  <!-- CAMPAIGN -->
+  <div id="screen-campaign" class="screen">
+    <div class="screen-header">
+      <button class="back-btn" onclick="UI.showScreen('screen-menu')">◄ BACK</button>
+      <h2 class="screen-title">CAMPAIGN</h2>
+    </div>
+    <div class="campaign-map" id="campaign-map"></div>
+  </div>
+
+  <!-- DAILY CHALLENGE -->
+  <div id="screen-daily" class="screen">
+    <div class="screen-header">
+      <button class="back-btn" onclick="UI.showScreen('screen-menu')">◄ BACK</button>
+      <h2 class="screen-title">DAILY CHALLENGE</h2>
+    </div>
+    <div class="daily-content" id="daily-content"></div>
+  </div>
+
+  <!-- RANKED -->
+  <div id="screen-ranked" class="screen">
+    <div class="screen-header">
+      <button class="back-btn" onclick="UI.showScreen('screen-menu')">◄ BACK</button>
+      <h2 class="screen-title">RANKED MODE</h2>
+    </div>
+    <div class="ranked-content" id="ranked-content"></div>
+  </div>
+
+  <!-- UPGRADES -->
+  <div id="screen-upgrades" class="screen">
+    <div class="screen-header">
+      <button class="back-btn" onclick="UI.showScreen('screen-menu')">◄ BACK</button>
+      <h2 class="screen-title">UPGRADE TREE</h2>
+      <span class="coin-display">⬡ <span id="upgrade-coins">0</span></span>
+    </div>
+    <div class="upgrades-grid" id="upgrades-grid"></div>
+  </div>
+
+  <!-- ACHIEVEMENTS -->
+  <div id="screen-achievements" class="screen">
+    <div class="screen-header">
+      <button class="back-btn" onclick="UI.showScreen('screen-menu')">◄ BACK</button>
+      <h2 class="screen-title">ACHIEVEMENTS</h2>
+      <span id="ach-progress-display"></span>
+    </div>
+    <div class="achievements-grid" id="achievements-grid"></div>
+  </div>
+
+  <!-- STATS -->
+  <div id="screen-stats" class="screen">
+    <div class="screen-header">
+      <button class="back-btn" onclick="UI.showScreen('screen-menu')">◄ BACK</button>
+      <h2 class="screen-title">STATISTICS</h2>
+    </div>
+    <div class="stats-content" id="stats-content"></div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div id="screen-settings" class="screen">
+    <div class="screen-header">
+      <button class="back-btn" onclick="UI.showScreen('screen-menu')">◄ BACK</button>
+      <h2 class="screen-title">SETTINGS</h2>
+    </div>
+    <div class="settings-content" id="settings-content"></div>
+  </div>
+
+  <!-- GAME SCREEN -->
+  <div id="screen-game" class="screen">
+    <!-- HUD Top -->
+    <div class="game-hud-top">
+      <div class="hud-left">
+        <button class="hud-btn" id="btn-pause" onclick="Game.togglePause()">⏸</button>
+        <div class="hud-mode-name" id="hud-mode-name">CLASSIC</div>
+      </div>
+      <div class="hud-center">
+        <div class="hud-timer-wrap" id="hud-timer-wrap">
+          <div class="hud-label">TIME</div>
+          <div class="hud-timer" id="hud-timer">--</div>
+        </div>
+      </div>
+      <div class="hud-right">
+        <div class="hud-stat">
+          <div class="hud-label">HP</div>
+          <div class="hud-hp" id="hud-hp">♥♥♥</div>
+        </div>
+        <div class="hud-stat">
+          <div class="hud-label">GUESSES</div>
+          <div class="hud-guesses" id="hud-guesses">∞</div>
+        </div>
+        <div class="hud-stat">
+          <div class="hud-label">COMBO</div>
+          <div class="hud-combo" id="hud-combo">x1</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Number System Header -->
+    <div class="game-number-system" id="game-number-system">
+      <span class="ns-label">BASE</span>
+      <span id="ns-display">DEC</span>
+      <span class="ns-range" id="ns-range">0 – 100</span>
+    </div>
+
+    <!-- Targets row (multi-number modes) -->
+    <div class="game-targets" id="game-targets"></div>
+
+    <!-- Main guess area -->
+    <div class="game-center">
+      <div class="guess-display" id="guess-display">
+        <div class="guess-prompt">ENTER YOUR GUESS</div>
+        <div class="guess-input-wrap">
+          <input type="text" id="guess-input" class="guess-input" placeholder="???" autocomplete="off" />
+          <button class="guess-btn" id="guess-btn" onclick="Game.submitGuess()">SUBMIT</button>
+        </div>
+        <div class="guess-error" id="guess-error"></div>
+      </div>
+
+      <div class="hint-panel" id="hint-panel">
+        <div class="hint-title">◈ INTEL FEED ◈</div>
+        <div class="hints-list" id="hints-list"></div>
+      </div>
+    </div>
+
+    <!-- Guess history -->
+    <div class="guess-history-wrap">
+      <div class="guess-history-title">GUESS LOG</div>
+      <div class="guess-history" id="guess-history"></div>
+    </div>
+
+    <!-- Powerup bar -->
+    <div class="powerup-bar" id="powerup-bar"></div>
+
+    <!-- XP bar -->
+    <div class="xp-bar-wrap">
+      <div class="xp-bar-inner" id="xp-bar-inner" style="width:0%"></div>
+      <div class="xp-bar-label" id="xp-bar-label">XP 0 / 100</div>
+    </div>
+
+    <!-- Pause Overlay -->
+    <div class="pause-overlay hidden" id="pause-overlay">
+      <div class="pause-box">
+        <div class="pause-title">PAUSED</div>
+        <button class="menu-btn" onclick="Game.togglePause()">▶ RESUME</button>
+        <button class="menu-btn" onclick="Game.forfeit()">✕ FORFEIT</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULT SCREEN -->
+  <div id="screen-result" class="screen">
+    <div class="result-content" id="result-content"></div>
+  </div>
+
+  <!-- TOAST container -->
+  <div id="toast-container"></div>
+
+  <!-- Particle canvas -->
+  <canvas id="particle-canvas"></canvas>
+
+  <script src="storage.js"></script>
+  <script src="effects.js"></script>
+  <script src="systems.js"></script>
+  <script src="modes.js"></script>
+  <script src="ui.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
